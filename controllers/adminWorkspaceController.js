@@ -86,15 +86,10 @@ exports.deleteWorkspacePermanently = catchAsync(async (req, res) => {
     throw new AppError("Company not found", 404);
   }
 
-  const [orderCount, userCount, assignmentCount] = await Promise.all([
-    Order.countDocuments({ workspace: workspaceId }),
+  const [userCount, assignmentCount] = await Promise.all([
     User.countDocuments({ workspaceCode: workspace.code }),
     DishCompanyAssignment.countDocuments({ companyId: workspaceId }),
   ]);
-
-  if (orderCount > 0) {
-    throw new AppError(`Cannot delete company with ${orderCount} orders. Please delete orders first.`, 400);
-  }
 
   // Delete all dish assignments for this company
   await DishCompanyAssignment.deleteMany({ companyId: workspaceId });
