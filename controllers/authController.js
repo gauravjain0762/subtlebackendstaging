@@ -92,6 +92,7 @@ exports.login = catchAsync(async (req, res) => {
   const workspace = await Workspace.findOne({ code: user.workspaceCode });
   if (workspace) {
     userObj.premiseType = workspace.premiseType;
+    userObj.workspaceStatus = workspace.status;
   }
 
   res.status(200).json({
@@ -106,6 +107,7 @@ exports.getMe = catchAsync(async (req, res) => {
   const workspace = await Workspace.findOne({ code: req.user.workspaceCode });
   if (workspace) {
     userObj.premiseType = workspace.premiseType;
+    userObj.workspaceStatus = workspace.status;
   }
 
   res.status(200).json({
